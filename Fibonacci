@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <time.h>
+
+// Función para medir el tiempo de ejecución
+double medirTiempoEjecucion(long (*func)(long), long posicion) {
+    clock_t inicio, fin;  // Variables para almacenar los tiempos de inicio y fin
+    double tiempo_ejecucion;
+
+    inicio = clock();       // Captura el tiempo de inicio
+    func(posicion);         // Llama a la función que se quiere medir
+    fin = clock();          // Captura el tiempo de finalización
+
+    // Calcula el tiempo transcurrido en segundos
+    tiempo_ejecucion = ((double)(fin - inicio)) / CLOCKS_PER_SEC;
+
+    return tiempo_ejecucion; // Retorna el tiempo de ejecución
+}
+
+// FUNCIÓN ITERATIVA 
+long fibonacci(long posicion) {
+    long siguiente = 1, actual = 0, temporal = 0;
+    for (long x = 1; x <= posicion; x++) {
+        temporal = actual;
+        actual = siguiente;
+        siguiente = siguiente + temporal;
+    }
+    return actual;
+}
+
+// FUNCIÓN RECURSIVA
+long fibonacciRecursivo(long posicion) {
+    if (posicion < 2)
+        return posicion;
+    return fibonacciRecursivo(posicion - 1) + fibonacciRecursivo(posicion - 2);
+}
+
+int main() {
+    int tipoalg; 
+    long pos; // Posición
+
+    printf("1. Iterativo \n2. Recursivo");
+    printf("\nDime qué algoritmo deseas utilizar:  ");
+    scanf("%d", &tipoalg);
+    
+    printf("¿Qué posición quieres utilizar?  ");
+    scanf("%li", &pos);
+
+    if (tipoalg == 1) {
+        
+        printf("Fibonacci iterativo de %li es: %li\n", pos, fibonacci(pos));
+        printf("El tiempo de ejecución es: %lf segundos\n", medirTiempoEjecucion(fibonacci, pos));
+    }
+    else if (tipoalg == 2) {
+        printf("Fibonacci recursivo de %li es: %li\n", pos, fibonacciRecursivo(pos));
+        printf("El tiempo de ejecución es: %lf segundos\n", medirTiempoEjecucion(fibonacciRecursivo, pos));
+    } 
+    else {
+        printf("\nNo es una opción válida, intenta de nuevo.\n");
+    }
+
+    return 0;
+}
